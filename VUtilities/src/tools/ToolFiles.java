@@ -16,19 +16,22 @@ import javax.swing.ImageIcon;
 
 // TODO Javadoc
 
-public class FileTools {
+public class ToolFiles {
 	
-	private FileTools(){}
+	private ToolFiles(){}
 	
-	public static String copyImageToLocalDirectoryOfProject(String filePath){
+	public static String copyImageToLocalDirectoryOfProject(String filePath,
+			String... folders){
 		
 		Path origin = Paths.get(filePath);
 		
-		File projectFilePath = FileTools.getExecutablePathDirectoryAsFile();
-		
-		String projectPath = projectFilePath.getParent();
+		String projectPath = getExecutablePathDirectory();
 		
 		String fileName = new File(filePath).getName();
+		
+		if(folders != null)
+			for(int i = 0; i < folders.length; i++)
+				projectPath += "\\" + folders[i];
 		
 		createDirsIfNotExists(projectPath);
 		
@@ -48,8 +51,12 @@ public class FileTools {
 		
 	}
 	
+	public static String copyImageToLocalDirectoryOfProject(String filePath){
+		return copyImageToLocalDirectoryOfProject(filePath, new String[] {});
+	}
+	
 	public static File getFileFromResources(String path){
-		return new File(FileTools.class.getResource(path).getFile());
+		return new File(ToolFiles.class.getResource(path).getFile());
 	}
 	
 	public static Image getImageFromResources(String imagePath){
@@ -58,7 +65,7 @@ public class FileTools {
 	
 	public static ImageIcon getImageIconFromResources(String imagePath){
 		return new ImageIcon(
-				FileTools.class.getResource("/images/" + imagePath));
+				ToolFiles.class.getResource("/images/" + imagePath));
 	}
 	
 	public static Image getImageFromProject(String path){
@@ -83,7 +90,7 @@ public class FileTools {
 	
 	public static File getExecutablePathDirectoryAsFile(){
 		try{
-			return new File(FileTools.class.getProtectionDomain()
+			return new File(ToolFiles.class.getProtectionDomain()
 					.getCodeSource().getLocation().toURI().getPath());
 		}
 		catch(URISyntaxException e){
@@ -92,7 +99,7 @@ public class FileTools {
 	}
 	
 	public static String getExecutablePathDirectory(){
-		return getExecutablePathDirectoryAsFile().getParent();
+		return getExecutablePathDirectoryAsFile().getParentFile().getParent();
 	}
 	
 	private static void createDirsIfNotExists(String directoryPath){
