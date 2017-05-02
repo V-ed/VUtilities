@@ -1,4 +1,5 @@
-package vutils.objects;
+package vutils.mysql;
+
 
 // TODO Javadoc
 

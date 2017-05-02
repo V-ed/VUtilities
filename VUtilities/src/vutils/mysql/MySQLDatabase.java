@@ -1,4 +1,4 @@
-package vutils.objects;
+package vutils.mysql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

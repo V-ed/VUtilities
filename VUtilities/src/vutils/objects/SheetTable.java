@@ -14,16 +14,21 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableModel;
+
+import vutils.mysql.TableObject;
+
+// TODO Javadoc
 
 public abstract class SheetTable extends JTable {
 	
-	private ArrayList<TableObject> items;
+	private ArrayList<Object> items;
 	private String[] columns;
 	
 	private AbstractTableModel tableModel;
 	private JScrollPane scrollableTable = null;
 	
-	public SheetTable(ArrayList<TableObject> items, String[] columns){
+	public SheetTable(ArrayList<Object> items, String[] columns){
 		
 		super();
 		
@@ -96,28 +101,25 @@ public abstract class SheetTable extends JTable {
 		
 	}
 	
-	public JScrollPane getScrollableTable(){
-		if(scrollableTable == null)
-			scrollableTable = new JScrollPane(this);
-		
-		return scrollableTable;
-	}
-	
 	@Override
 	public abstract Object getValueAt(int rowIndex, int columnIndex);
+	
+	protected void actionOnSelect(boolean hasSelection){}
+	
+	protected void actionOnDoubleClick(){}
 	
 	@Override
 	public Class<?> getColumnClass(int columnIndex){
 		return super.getColumnClass(columnIndex);
 	}
 	
-	protected abstract void actionOnSelect(boolean hasSelection);
-	
-	protected abstract void actionOnDoubleClick();
-	
 	@Override
 	public String getColumnName(int columnIndex){
 		return columns[columnIndex];
+	}
+	
+	public String[] getColumns(){
+		return columns;
 	}
 	
 	public void addItem(TableObject newItem){
@@ -166,7 +168,7 @@ public abstract class SheetTable extends JTable {
 		
 	}
 	
-	public void setObjects(ArrayList<TableObject> items){
+	public void setObjects(ArrayList<Object> items){
 		
 		if(items.size() > 0){
 			this.items = items;
@@ -182,6 +184,27 @@ public abstract class SheetTable extends JTable {
 	
 	public void fireTableDataChanged(){
 		tableModel.fireTableDataChanged();
+	}
+	
+	@Override
+	public TableModel getModel(){
+		return tableModel;
+	}
+	
+	/**
+	 * Essentially does what {@link javax.swing.JTable#getModel()
+	 * <i>getModel()</i>} does, except by returning the model as an
+	 * AbstractTableModel directly.
+	 */
+	public AbstractTableModel getAbstractModel(){
+		return tableModel;
+	}
+	
+	public JScrollPane getScrollableTable(){
+		if(scrollableTable == null)
+			scrollableTable = new JScrollPane(this);
+		
+		return scrollableTable;
 	}
 	
 }
