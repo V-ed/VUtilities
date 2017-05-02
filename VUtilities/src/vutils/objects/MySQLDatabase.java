@@ -1,4 +1,4 @@
-package objects;
+package vutils.objects;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

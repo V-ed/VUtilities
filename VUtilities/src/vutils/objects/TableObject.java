@@ -1,4 +1,4 @@
-package objects;
+package vutils.objects;
 
 // TODO Javadoc
 

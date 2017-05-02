@@ -1,4 +1,4 @@
-package objects;
+package vutils.objects;
 
 import java.awt.Color;
 import java.awt.Dimension;
