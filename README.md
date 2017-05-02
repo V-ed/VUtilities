@@ -2,6 +2,10 @@
 
 This is a Java package that serves a list of possible tasks.
 
+# Information
+
+**_todo_**
+
 # Downloads
 
 | Version   | jar file                         | source                                  | javadoc                                  |
@@ -10,11 +14,7 @@ This is a Java package that serves a list of possible tasks.
 
 Navigate through or download any version folders [here](https://www.dropbox.com/sh/ormbxm6ht48f9gr/AABSxmlCyQGEiFdwdhXfoozQa).
 
-# Install
-
-**_todo_**
-
-# Information
+# Installation
 
 **_todo_**
 
