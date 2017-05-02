@@ -42,12 +42,22 @@ public class ToolFiles {
 			StandardCopyOption.COPY_ATTRIBUTES
 		};
 		
+		String imageInProjectPath = null;
+		
 		try{
+			
 			Files.copy(origin, destination, options);
+			
+			if(folders != null)
+				for(int i = 0; i < folders.length; i++)
+					imageInProjectPath += folders[i] + "\\";
+			
+			imageInProjectPath += fileName;
+			
 		}
 		catch(IOException e){}
 		
-		return fileName;
+		return imageInProjectPath;
 		
 	}
 	
@@ -64,8 +74,7 @@ public class ToolFiles {
 	}
 	
 	public static ImageIcon getImageIconFromResources(String imagePath){
-		return new ImageIcon(
-				ToolFiles.class.getResource("/images/" + imagePath));
+		return new ImageIcon(ToolFiles.class.getResource(imagePath));
 	}
 	
 	public static Image getImageFromProject(String path){

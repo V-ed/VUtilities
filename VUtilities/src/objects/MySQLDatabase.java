@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * Object used to deal with a MySQL Database.
  * 
  * @version 1.7
- * @author Guillaume Marcoux
+ * @author Guillaume Marcoux (V-ed)
  */
 public class MySQLDatabase {
 	
