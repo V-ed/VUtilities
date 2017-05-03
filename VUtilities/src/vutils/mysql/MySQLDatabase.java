@@ -7,10 +7,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import vutils.tools.ToolCode;
+
 /**
  * Object used to deal with a MySQL Database.
  * 
- * @version 1.7
+ * @version 1.8
  * @author Guillaume Marcoux (V-ed)
  */
 public class MySQLDatabase {
@@ -46,6 +48,11 @@ public class MySQLDatabase {
 		
 		Class.forName("com.mysql.jdbc.Driver");
 		
+		ToolCode.testNullOrEmptyArg(ip, "ip");
+		ToolCode.testNullOrEmptyArg(databaseName, "name of the database");
+		ToolCode.testNullOrEmptyArg(user, "username");
+		ToolCode.testNullOrEmptyArg(password, "password");
+		
 		connection = DriverManager.getConnection("jdbc:mysql://" + ip + "/"
 				+ databaseName, user, password);
 		
@@ -61,6 +68,8 @@ public class MySQLDatabase {
 	 *         error.
 	 */
 	public ResultSet executeQuery(String query){
+		
+		ToolCode.testNullOrEmptyArg(query, "query");
 		
 		ResultSet results = null;
 		
@@ -83,7 +92,11 @@ public class MySQLDatabase {
 	 *         error.
 	 */
 	public ResultSet selectEverythingFrom(String tableName){
+		
+		ToolCode.testNullOrEmptyArg(tableName, "table's name");
+		
 		return executeQuery("SELECT * FROM " + tableName);
+		
 	}
 	
 	/**
@@ -104,6 +117,10 @@ public class MySQLDatabase {
 	public ResultSet getAllContentWhere(String tableName, String columnName,
 			Object textToMatch){
 		
+		ToolCode.testNullOrEmptyArg(tableName, "table's name");
+		ToolCode.testNullOrEmptyArg(columnName, "column's name");
+		ToolCode.testNullOrEmptyArg(textToMatch, "text to search");
+		
 		String sqlRequest = "SELECT * FROM " + tableName;
 		sqlRequest += " WHERE " + columnName + " = \"" + textToMatch + "\"";
 		
@@ -114,7 +131,7 @@ public class MySQLDatabase {
 	/**
 	 * Method to get all item's content of a specified column.
 	 * 
-	 * @param donnees
+	 * @param resultSet
 	 *            <code>ResultSet</code> object containing the items to search
 	 *            for.
 	 * @param columnName
@@ -124,7 +141,10 @@ public class MySQLDatabase {
 	 *         specified column, <code>null</code> if the <code>ResultSet</code>
 	 *         is empty or if there's an SQL error.
 	 */
-	public Object[] getAllContentOfColumn(ResultSet donnees, String columnName){
+	public Object[] getAllContentOfColumn(ResultSet resultSet, String columnName){
+		
+		ToolCode.testNullOrEmptyArg(resultSet, "ResulSet object");
+		ToolCode.testNullOrEmptyArg(columnName, "column name");
 		
 		Object[] results = null;
 		
@@ -132,9 +152,9 @@ public class MySQLDatabase {
 		
 		try{
 			
-			while(donnees.next()){
+			while(resultSet.next()){
 				
-				allContentList.add(donnees.getString(columnName));
+				allContentList.add(resultSet.getString(columnName));
 				
 			}
 			
@@ -165,6 +185,10 @@ public class MySQLDatabase {
 	 */
 	public Object[] getRowContentOfTableWhere(String tableName,
 			String columnName, String textToMatch){
+		
+		ToolCode.testNullOrEmptyArg(tableName, "table's name");
+		ToolCode.testNullOrEmptyArg(columnName, "column name");
+		ToolCode.testNullOrEmptyArg(textToMatch, "text to search");
 		
 		Object[] rowContent = null;
 		
@@ -208,6 +232,8 @@ public class MySQLDatabase {
 	 */
 	public ArrayList<Object[]> getAllContentofTable(String tableName){
 		
+		ToolCode.testNullOrEmptyArg(tableName, "table's name");
+		
 		ResultSet queryResults = selectEverythingFrom(tableName);
 		
 		return convertResultSetToArraylistOfObjects(queryResults);
@@ -231,6 +257,9 @@ public class MySQLDatabase {
 	 */
 	public ArrayList<Object[]> getAllContentWhere(String tableName,
 			Object... conditions){
+		
+		ToolCode.testNullOrEmptyArg(tableName, "table's name");
+		ToolCode.testNullOrEmptyArg(conditions, "conditions array");
 		
 		String sqlRequest = "SELECT * FROM " + tableName + " WHERE ";
 		
@@ -328,6 +357,10 @@ public class MySQLDatabase {
 			String[] columnsToSearch, Object[] valuesToSearch,
 			boolean isValuesAbsolute){
 		
+		ToolCode.testNullOrEmptyArg(tableName, "table's name");
+		ToolCode.testNullOrEmptyArg(columnsToSearch, "columns to search array");
+		ToolCode.testNullOrEmptyArg(valuesToSearch, "values to search array");
+		
 		ArrayList<Object[]> list = null;
 		
 		if(columnsToSearch.length == valuesToSearch.length
@@ -385,6 +418,10 @@ public class MySQLDatabase {
 	 */
 	public int addToTable(String tableName, String[] columnNames,
 			Object[] values){
+		
+		ToolCode.testNullOrEmptyArg(tableName, "table's name");
+		ToolCode.testNullOrEmptyArg(columnNames, "columns names array");
+		ToolCode.testNullOrEmptyArg(values, "values array");
 		
 		int idCreated = -1;
 		
@@ -468,6 +505,12 @@ public class MySQLDatabase {
 	public boolean modifyObject(String tableName, String idColumnName,
 			Object id, String[] columnNames, Object[] values){
 		
+		ToolCode.testNullOrEmptyArg(tableName, "table's name");
+		ToolCode.testNullOrEmptyArg(idColumnName, "id's column name");
+		ToolCode.testNullOrEmptyArg(id, "id");
+		ToolCode.testNullOrEmptyArg(columnNames, "columns names array");
+		ToolCode.testNullOrEmptyArg(values, "values array");
+		
 		boolean success = false;
 		
 		String sqlRequest = "UPDATE " + tableName;
@@ -515,6 +558,9 @@ public class MySQLDatabase {
 	 */
 	public boolean removeFromTable(String tableName, String condition){
 		
+		ToolCode.testNullOrEmptyArg(tableName, "table's name");
+		ToolCode.testNullOrEmptyArg(condition, "condition");
+		
 		boolean success = false;
 		
 		String sqlRequest = "DELETE FROM " + tableName + " WHERE " + condition;
@@ -551,6 +597,10 @@ public class MySQLDatabase {
 	public boolean removeFromTable(String tableName, String idColumnName,
 			Object id){
 		
+		ToolCode.testNullOrEmptyArg(tableName, "table's name");
+		ToolCode.testNullOrEmptyArg(idColumnName, "id column name");
+		ToolCode.testNullOrEmptyArg(id, "id");
+		
 		String condition = idColumnName + " = \"" + id + "\"";
 		
 		return removeFromTable(tableName, condition);
@@ -571,39 +621,37 @@ public class MySQLDatabase {
 	private ArrayList<Object[]> convertResultSetToArraylistOfObjects(
 			ResultSet queryResults){
 		
+		ToolCode.testNullOrEmptyArg(queryResults, "ResultSet object");
+		
 		ArrayList<Object[]> table = null;
 		
-		if(queryResults != null){
+		table = new ArrayList<>();
+		
+		try{
 			
-			table = new ArrayList<>();
-			
-			try{
+			int nCol = queryResults.getMetaData().getColumnCount();
+			while(queryResults.next()){
 				
-				int nCol = queryResults.getMetaData().getColumnCount();
-				while(queryResults.next()){
+				Object[] row = new Object[nCol];
+				
+				for(int iCol = 1; iCol <= nCol; iCol++){
+					Object obj = queryResults.getObject(iCol);
 					
-					Object[] row = new Object[nCol];
+					if(obj instanceof Boolean)
+						obj = (boolean)obj ? 1 : 0;
 					
-					for(int iCol = 1; iCol <= nCol; iCol++){
-						Object obj = queryResults.getObject(iCol);
-						
-						if(obj instanceof Boolean)
-							obj = (boolean)obj ? 1 : 0;
-						
-						row[iCol - 1] = (obj == null) ? null : obj;
-					}
-					
-					table.add(row);
-					
+					row[iCol - 1] = (obj == null) ? null : obj;
 				}
 				
-				queryResults.close();
+				table.add(row);
 				
 			}
-			catch(SQLException e){
-				table = null;
-			}
 			
+			queryResults.close();
+			
+		}
+		catch(SQLException e){
+			table = null;
 		}
 		
 		return table;
@@ -617,7 +665,7 @@ public class MySQLDatabase {
 		
 		try{
 			
-			if(connection.isClosed())
+			if(!connection.isClosed())
 				connection.close();
 			
 		}

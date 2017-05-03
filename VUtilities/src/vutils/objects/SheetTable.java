@@ -1,7 +1,5 @@
 package vutils.objects;
 
-import java.awt.Component;
-import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -9,14 +7,12 @@ import java.util.ArrayList;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
-import vutils.mysql.TableObject;
+import vutils.mysql.TableItem;
 
 // TODO Javadoc
 
@@ -62,26 +58,6 @@ public abstract class SheetTable extends JTable {
 		
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
-		getColumn(columns[0]).setCellRenderer(new DefaultTableCellRenderer(){
-			
-			@Override
-			public Component getTableCellRendererComponent(JTable table,
-					Object value, boolean isSelected, boolean hasFocus,
-					int row, int column){
-				
-				Component superRenderer = super.getTableCellRendererComponent(
-						table, value, isSelected, hasFocus, row, column);
-				
-				setHorizontalAlignment(SwingConstants.CENTER);
-				superRenderer.setFont(superRenderer.getFont().deriveFont(
-						Font.BOLD));
-				
-				return superRenderer;
-				
-			}
-			
-		});
-		
 		getSelectionModel().addListSelectionListener(
 				new ListSelectionListener(){
 					@Override
@@ -122,14 +98,14 @@ public abstract class SheetTable extends JTable {
 		return columns;
 	}
 	
-	public void addItem(TableObject newItem){
+	public void addItem(TableItem newItem){
 		
 		items.add(newItem);
 		tableModel.fireTableRowsInserted(items.size() - 1, items.size() - 1);
 		
 	}
 	
-	public void modifyItemAt(int index, TableObject modifiedObject){
+	public void modifyItemAt(int index, TableItem modifiedObject){
 		
 		items.set(index, modifiedObject);
 		tableModel.fireTableRowsUpdated(index, index);

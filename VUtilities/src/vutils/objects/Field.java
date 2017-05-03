@@ -15,7 +15,7 @@ import javax.swing.JTextArea;
  * Class extending {@link javax.swing.JTextArea JTextArea} with the addition of
  * a default text within the component.
  * 
- * @version 1.4
+ * @version 1.5
  * @author V-ed
  */
 public class Field extends JTextArea implements FocusListener {
@@ -41,21 +41,20 @@ public class Field extends JTextArea implements FocusListener {
 		
 		JAVA_DEFAULT_COLOR = this.getForeground();
 		
-		this.setBorder(BorderFactory.createCompoundBorder(
+		setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createLineBorder(Color.GRAY),
 				BorderFactory.createEmptyBorder(2, 2, 2, 2)));
 		
-		this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,
+		setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, null);
+		setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS,
 				null);
-		this.setFocusTraversalKeys(
-				KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, null);
 		
-		this.setVisualState(false);
+		setVisualState(false);
 		
-		this.addFocusListener(this);
+		addFocusListener(this);
 		
 		if(defaultText != null)
-			this.setDefaultText(defaultText);
+			setDefaultText(defaultText);
 		if(isSingleLine)
 			getDocument().putProperty("filterNewlines", Boolean.TRUE);
 		
@@ -76,7 +75,7 @@ public class Field extends JTextArea implements FocusListener {
 		
 		this(defaultText, isSingleLine);
 		
-		this.setPreferredSize(new Dimension(width, height));
+		setPreferredSize(new Dimension(width, height));
 		
 	}
 	
@@ -92,13 +91,13 @@ public class Field extends JTextArea implements FocusListener {
 	public void setVisualState(boolean isFocused){
 		
 		if(isFocused){
-			this.setForeground(JAVA_DEFAULT_COLOR);
-			this.setFont(this.getFont().deriveFont(Font.PLAIN));
+			setForeground(JAVA_DEFAULT_COLOR);
+			setFont(this.getFont().deriveFont(Font.PLAIN));
 			super.setText("");
 		}
 		else{
-			this.setForeground(Color.LIGHT_GRAY);
-			this.setFont(this.getFont().deriveFont(Font.ITALIC));
+			setForeground(Color.LIGHT_GRAY);
+			setFont(this.getFont().deriveFont(Font.ITALIC));
 			super.setText(getDefaultText());
 			setChangedState(false);
 		}
@@ -143,13 +142,13 @@ public class Field extends JTextArea implements FocusListener {
 	
 	@Override
 	public void setText(String t){
-		this.simulateInput(t);
+		simulateInput(t);
 	}
 	
 	private void simulateInput(String input){
 		
-		this.setChangedState(true);
-		this.setVisualState(true);
+		setChangedState(true);
+		setVisualState(true);
 		super.setText(input);
 		
 	}

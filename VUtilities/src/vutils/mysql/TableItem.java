@@ -1,22 +1,32 @@
 package vutils.mysql;
 
+import vutils.tools.ToolCode;
 
 // TODO Javadoc
 
-public abstract class TableObject {
+public abstract class TableItem {
 	
 	protected MySQLDatabase database;
 	protected String tableName;
 	
 	protected String idColumnName;
-	protected int idObject = -1;
+	protected int idItem = -1;
 	
 	protected String[] columnNames;
 	protected Object[] values;
 	
-	protected TableObject(MySQLDatabase database, String tableName,
+	protected TableItem(MySQLDatabase database, String tableName,
 			String idColumnName, String[] columnNames, boolean isFirstValueID,
 			Object... values){
+		
+		// Testing for illegal arguments
+		ToolCode.testNullOrEmptyArg(database, "database object");
+		ToolCode.testNullOrEmptyArg(tableName, "table's name");
+		ToolCode.testNullOrEmptyArg(idColumnName,
+				"column name of this object's id");
+		ToolCode.testNullOrEmptyArg(columnNames, "column names array");
+		ToolCode.testNullOrEmptyArg(values, "values array");
+		// Arguments good, proceed.
 		
 		this.database = database;
 		
@@ -24,7 +34,7 @@ public abstract class TableObject {
 		this.idColumnName = idColumnName;
 		
 		if(isFirstValueID)
-			this.idObject = (int)values[0];
+			this.idItem = (int)values[0];
 		
 		this.columnNames = columnNames;
 		this.values = values;
@@ -40,11 +50,17 @@ public abstract class TableObject {
 	}
 	
 	public int getID(){
-		return idObject;
+		return idItem;
 	}
 	
-	public void setID(int idObject){
-		this.idObject = idObject;
+	public void setID(int idItem){
+		
+		if(idItem < 0)
+			throw new IllegalArgumentException(
+					"The id cannot be a negative number.");
+		else
+			this.idItem = idItem;
+		
 	}
 	
 	public String[] getColumnNames(){
@@ -80,14 +96,19 @@ public abstract class TableObject {
 	
 	public void addToDatabase(){
 		
-		idObject = database.addToTable(tableName, getColumnNamesWithoutID(),
+		idItem = database.addToTable(tableName, getColumnNamesWithoutID(),
 				getValuesWithoutID());
 		
 	}
 	
 	public void modifyItem(Object... values){
 		
-		if(idObject != -1){
+		ToolCode.testNullOrEmptyArg(values, "values array");
+		
+		if(idItem == -1)
+			throw new IllegalStateException(
+					"The id of this item must be set, acheivable by adding this item to the database (with element.addToDatabase()).");
+		else{
 			
 			Object[] valuesWithID = new Object[values.length + 1];
 			
@@ -99,22 +120,28 @@ public abstract class TableObject {
 			
 			this.values = valuesWithID;
 			
-			database.modifyObject(tableName, idColumnName, idObject,
+			database.modifyObject(tableName, idColumnName, idItem,
 					getColumnNamesWithoutID(), getValuesWithoutID());
 			
 		}
 		
 	}
 	
-	public abstract void modifyItem(TableObject modifiedObject);
+	public void modifyItem(TableItem modifiedItem){
+		
+		if(modifiedItem == null)
+			throw new IllegalArgumentException(
+					"The modified item cannot be null.");
+		
+	}
 	
 	public void removeFromDatabase(){
 		
-		if(idObject != -1){
-			
-			database.removeFromTable(tableName, idColumnName, idObject);
-			
-		}
+		if(idItem == -1)
+			throw new IllegalStateException(
+					"The id of this item must be set, acheivable by adding this item to the database (with element.addToDatabase()).");
+		else
+			database.removeFromTable(tableName, idColumnName, idItem);
 		
 	}
 	
