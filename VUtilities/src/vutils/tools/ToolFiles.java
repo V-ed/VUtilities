@@ -83,9 +83,8 @@ public class ToolFiles {
 	
 	public static ImageIcon getImageIconFromProject(String path){
 		
-		String filePath = getExecutablePathDirectory() + "\\" + path;
-		
-		return getImageIconFromAbsolutePath(filePath);
+		return getImageIconFromAbsolutePath(getFileFromLocalDirectoryOfProject(
+				path).getAbsolutePath());
 		
 	}
 	

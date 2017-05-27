@@ -10,9 +10,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-
-import vutils.mysql.TableItem;
 
 // TODO Javadoc
 
@@ -54,7 +53,24 @@ public abstract class SheetTable extends JTable {
 			}
 			
 		};
-		setModel(tableModel);
+		
+		if(items == null){
+			
+			DefaultTableModel emptyModel = new DefaultTableModel(new Object[][]
+			{
+				{
+					null, null
+				}
+			}, columns);
+			
+			setModel(emptyModel);
+			
+		}
+		else{
+			
+			setModel(tableModel);
+			
+		}
 		
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
@@ -70,7 +86,7 @@ public abstract class SheetTable extends JTable {
 		addMouseListener(new MouseAdapter(){
 			public void mousePressed(MouseEvent e){
 				if(e.getClickCount() == 2){
-					actionOnDoubleClick();
+					actionOnDoubleClick(getSelectedItem());
 				}
 			}
 		});
@@ -82,7 +98,7 @@ public abstract class SheetTable extends JTable {
 	
 	protected void actionOnSelect(boolean hasSelection){}
 	
-	protected void actionOnDoubleClick(){}
+	protected void actionOnDoubleClick(Object doubleClickedObject){}
 	
 	@Override
 	public Class<?> getColumnClass(int columnIndex){
@@ -98,14 +114,14 @@ public abstract class SheetTable extends JTable {
 		return columns;
 	}
 	
-	public void addItem(TableItem newItem){
+	public void addItem(Object newItem){
 		
 		items.add(newItem);
 		tableModel.fireTableRowsInserted(items.size() - 1, items.size() - 1);
 		
 	}
 	
-	public void modifyItemAt(int index, TableItem modifiedObject){
+	public void modifyItemAt(int index, Object modifiedObject){
 		
 		items.set(index, modifiedObject);
 		tableModel.fireTableRowsUpdated(index, index);

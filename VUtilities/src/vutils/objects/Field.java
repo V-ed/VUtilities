@@ -124,9 +124,6 @@ public class Field extends JTextArea implements FocusListener {
 	/**
 	 * @return The text inside of this Field if modified, <code>null</code>
 	 *         otherwise.
-	 * 
-	 * @see javax.swing.text.JTextComponent#getText()
-	 *      <i>JTextComponent</i>.getText()
 	 */
 	@Override
 	public String getText(){
